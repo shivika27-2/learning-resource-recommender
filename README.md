@@ -1,15 +1,13 @@
-# learning-resource-recommender
 # 📚 Personalized Learning Resource Recommender
 
-A machine learning project built as part of the **Fundamentals of AI and ML** course (BYOP Submission).
+A machine learning project built as part of the **Fundamentals of AI and ML** course (BYOP Submission).  
+This system identifies weak topics for students based on their scores and recommends targeted free learning resources.
 
 ---
 
 ## 📌 Problem Statement
 
-Students often do not know which topics they are weak in and where to find good resources to improve. Teachers also cannot always identify struggling students early enough to help them.
-
-This project solves that by asking a student to enter their scores across 6 topics. The system then automatically detects which topics are weak, classifies the severity of the weakness using a machine learning model, and recommends the best free learning resources for each weak topic.
+Students often do not know which topics they are weak in and where to find good resources to improve. This project automates that process — the student enters their scores across 6 topics, and the system instantly detects weak areas, classifies severity using ML, and recommends the best free resources for each weak topic.
 
 ---
 
@@ -18,7 +16,7 @@ This project solves that by asking a student to enter their scores across 6 topi
 - Students waste time studying topics they already know
 - Finding quality resources online is confusing and time-consuming
 - Early identification of weak areas leads to better learning outcomes
-- This system gives instant, personalized guidance to any student
+- Personalized recommendations improve academic performance
 
 ---
 
@@ -27,24 +25,34 @@ This project solves that by asking a student to enter their scores across 6 topi
 ```
 Student enters name and scores for 6 topics
                 ↓
-Weak Topic Detection  →  score < 60 is marked as weak
+  [Supervised] Threshold Classification
+  Score < 60 = Weak topic detected
                 ↓
-Severity Classification  →  Mild / Moderate / Severe
+  [Unsupervised] KMeans Clustering
+  Groups student as Low / Medium / High performer
                 ↓
-Personalized Resource Recommendations printed for each weak topic
+  [Supervised] Random Forest Classifier
+  Predicts severity → Mild / Moderate / Severe
+                ↓
+  Personalized Resource Recommendations printed
 ```
 
 ---
 
-## 🤖 ML Concepts Used
+## 🤖 AI & ML Concepts Applied (Course Mapping)
 
-| Concept | How It Is Used |
+| Course Concept | How It Is Used in This Project |
 |---|---|
-| Threshold-based Classification | Detects weak topics (score < 60) |
-| KMeans Clustering | Groups students into Low / Medium / High performers |
-| Random Forest Classifier | Predicts severity of weakness (Mild / Moderate / Severe) |
-| Data Generation | Synthetic dataset of 200 students created using NumPy |
-| Data Preprocessing | StandardScaler used to normalize scores before clustering |
+| Supervised Learning | Random Forest Classifier predicts weakness severity |
+| Unsupervised Learning | KMeans Clustering groups students by performance |
+| Classification | Threshold-based weak topic detection (score < 60) |
+| Ensemble Learning | Random Forest uses multiple decision trees |
+| Data Preprocessing | StandardScaler normalizes scores before clustering |
+| Train / Test Split | 80/20 split used to evaluate the classifier |
+| Model Evaluation | Accuracy, Precision, Recall, F1-score reported |
+| Feature Importance | Random Forest ranks which topics affect severity most |
+| Data Visualization | Bar chart showing weak topic distribution (Matplotlib) |
+| Synthetic Data Generation | 200-student dataset created using NumPy |
 
 ---
 
@@ -52,13 +60,13 @@ Personalized Resource Recommendations printed for each weak topic
 
 ```
 learning-resource-recommender/
-├── main.py                  ← Run this file to start the program
+├── main.py                  ← Run this to start the interactive program
 ├── requirements.txt         ← All required Python libraries
 ├── README.md                ← Project documentation
 └── src/
-    ├── generate_data.py     ← Generates synthetic student score dataset
-    ├── weakness_detector.py ← Detects weak topics + KMeans clustering
-    └── recommender.py       ← Random Forest model + resource recommendations
+    ├── generate_data.py     ← Generates synthetic student dataset (200 students, 6 topics)
+    ├── weakness_detector.py ← KMeans clustering + weak topic detection + bar chart
+    └── recommender.py       ← Random Forest classifier + resource recommendations
 ```
 
 ---
@@ -80,9 +88,9 @@ cd learning-resource-recommender
 pip install -r requirements.txt
 ```
 
-This installs: `pandas`, `numpy`, `scikit-learn`, `matplotlib`
+Installs: `pandas`, `numpy`, `scikit-learn`, `matplotlib`
 
-### Step 3 — Run the program
+### Step 3 — Run the interactive program
 ```bash
 python main.py
 ```
@@ -91,22 +99,20 @@ python main.py
 
 ## 💻 How to Use
 
-Once you run `python main.py`, the program will ask you to:
+Once you run `python main.py`, the program will:
 
-1. Enter your name
-2. Enter your score (0–100) for each of the 6 topics:
+1. Ask for your **name**
+2. Ask you to enter your **score (0–100)** for each of 6 topics:
    - Math
    - Statistics
    - Python
    - Linear Algebra
    - ML Basics
    - Data Visualization
-
-The program will then display:
-- Your scores with ✓ Good or ⚠ Weak status
-- List of weak topics
-- Severity level (Mild / Moderate / Severe)
-- Recommended free resources for each weak topic
+3. Show your scores with ✓ Good or ⚠ Weak status
+4. Show weak topics and severity level
+5. Print recommended free resources for each weak topic
+6. Ask if you want to check another student
 
 ---
 
@@ -173,42 +179,77 @@ Check another student? (yes/no): no
 
 ---
 
-## 📊 Dataset
+## 📊 Model Evaluation Results
 
-Since no real student dataset was available, a synthetic dataset of **200 students** was generated using NumPy with realistic score distributions across 6 topics. This is a valid and common approach in ML projects where real data is unavailable or restricted.
+| Metric | Value |
+|---|---|
+| Algorithm | Random Forest Classifier |
+| Train / Test Split | 80% / 20% |
+| Overall Accuracy | ~62% |
+| Classes | None, Mild, Moderate, Severe |
+| Evaluation Method | classification_report (scikit-learn) |
 
-The dataset is auto-generated when you run the `src/generate_data.py` file and saved as `data/student_scores.csv`.
-
----
-
-## 🚧 Challenges Faced
-
-- **No real dataset available** — solved by generating synthetic data with realistic score distributions
-- **Class imbalance in severity labels** — some severity levels had fewer samples, affecting classifier accuracy
-- **Cold start problem** — the system needs scores as input; it cannot recommend without any data
+> Note: The dataset is synthetic, so accuracy reflects how well the Random Forest generalizes the severity pattern derived from the threshold rule.
 
 ---
 
-## 🔮 Future Improvements
+## 📊 Dataset Details
 
-- Connect to a real student database
-- Add a web interface using Flask or Streamlit
-- Include more topics and resources
-- Track student progress over time
+| Property | Details |
+|---|---|
+| Type | Synthetic (generated using NumPy) |
+| Number of students | 200 |
+| Number of topics | 6 |
+| Score range | 20 to 100 |
+| Weak threshold | Score below 60 |
+| File | data/student_scores.csv (auto-generated) |
+
+> Synthetic data is used because real student data is private and restricted. This is a standard and accepted practice in ML projects.
 
 ---
 
 ## 📦 Dependencies
 
-| Library | Version | Purpose |
-|---|---|---|
-| pandas | latest | Data handling |
-| numpy | latest | Synthetic data generation |
-| scikit-learn | latest | KMeans, Random Forest, Scaler |
-| matplotlib | latest | Visualizations |
+| Library | Purpose |
+|---|---|
+| pandas | Data handling and CSV operations |
+| numpy | Synthetic data generation |
+| scikit-learn | KMeans, Random Forest, StandardScaler, evaluation |
+| matplotlib | Data visualization (bar charts) |
+
+Install all with:
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🚧 Challenges Faced
+
+- No real dataset available — solved using synthetic data generation
+- Class imbalance in severity labels — fewer samples for Mild and None classes
+- Cold start — system needs scores as input to provide recommendations
+
+---
+
+## 🔮 Future Improvements
+
+- Connect to a real student database or LMS
+- Build a web interface using Flask or Streamlit
+- Add progress tracking over time
+- Use SMOTE to handle class imbalance
+- Expand resource bank with more topics
 
 ---
 
 ## 👤 Author
 
-**Shivika** — Fundamentals of AI and ML, BYOP Submission, 2026
+name-Shivika patidar
+brach -cse ai ml
+vit bhopal
+ Fundamentals of AI and ML, BYOP Submission, 2026  
+GitHub: [shivika27-2](https://github.com/shivika27-2)
+
+
+
+
