@@ -4,7 +4,7 @@
 # Classifies severity (Mild / Moderate / Severe) using ML
 # Then maps weak topics → curated resource links
 # ============================================================
-
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
