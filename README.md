@@ -245,9 +245,7 @@ pip install -r requirements.txt
 ## 👤 Author
 
 name-Shivika patidar
-brach -cse ai ml
-vit bhopal
- Fundamentals of AI and ML, BYOP Submission, 2026  
+
 GitHub: [shivika27-2](https://github.com/shivika27-2)
 
 
